@@ -36,16 +36,27 @@ export default function ImageUploader({ carId, onUploaded }: Props) {
 
   return (
     <div>
-      <label className="font-body text-xs tracking-widest uppercase text-gray-400 block mb-2">
+      <label className="font-body text.xs tracking-widest uppercase text-gray-400 block mb-2">
         Car Image
       </label>
-      <div className="border-2 border-dashed border-gray-200 p-6 text-center hover:border-[#c8a96e] transition-colors">
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleFile}
+        className="hidden"
+        id="car-image-upload"
+        disabled={uploading}
+      />
+      <label
+        htmlFor="car-image-upload"
+        className="border-2 border-dashed border-gray-200 p-6 text-center hover:border-[#c8a96e] transition-colors cursor-pointer block"
+      >
         {preview ? (
-          <div className="relative">
+          <div className="relative inline-block">
             <Image src={preview} alt="Preview" width={200} height={120} className="mx-auto object-cover" />
             <button
               type="button"
-              onClick={() => setPreview(null)}
+              onClick={(e) => { e.preventDefault(); setPreview(null); }}
               className="absolute top-0 right-0 bg-red-500 text-white p-1"
             >
               <X size={12} />
@@ -63,14 +74,7 @@ export default function ImageUploader({ carId, onUploaded }: Props) {
             )}
           </div>
         )}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFile}
-          className="absolute inset-0 opacity-0 cursor-pointer"
-          disabled={uploading}
-        />
-      </div>
+      </label>
     </div>
   );
 }
