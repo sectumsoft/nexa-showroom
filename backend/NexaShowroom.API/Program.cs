@@ -9,6 +9,7 @@ using NexaShowroom.Infrastructure.Data;
 using NexaShowroom.Infrastructure.Repositories;
 using NexaShowroom.Infrastructure.Services;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 
 // ── Database ──────────────────────────────────────────────────
