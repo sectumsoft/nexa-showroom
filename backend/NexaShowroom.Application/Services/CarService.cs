@@ -104,8 +104,7 @@ public class CarService : ICarService
         return ApiResponse<bool>.Ok(true);
     }
 
-public async Task<ApiResponse<CarImage>> UploadCarImageAsync(int carId, UploadImageRequest request)
-{
+public async Task<ApiResponse<DTOs.Response.CarImage>> UploadCarImageAsync(int carId, UploadImageRequest request){
     var imageUrl = !string.IsNullOrEmpty(request.ImageUrl)
         ? request.ImageUrl
         : string.Empty;
@@ -124,7 +123,7 @@ public async Task<ApiResponse<CarImage>> UploadCarImageAsync(int carId, UploadIm
     await _uow.AddCarImageAsync(carImage);
     await _uow.SaveChangesAsync();
 
-    return ApiResponse<CarImage>.Ok(new CarImage { ImageUrl = imageUrl });
+    return ApiResponse<DTOs.Response.CarImage>.Ok(new DTOs.Response.CarImage { ImageUrl = imageUrl });
 }
     private static CarSummaryResponse MapToSummary(Car c) => new()
     {
