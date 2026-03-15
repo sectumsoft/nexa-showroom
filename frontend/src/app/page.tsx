@@ -28,7 +28,7 @@ export default async function HomePage() {
     loop
     playsInline
     className="absolute inset-0 w-full h-full object-cover opacity-40"
-    src="https://res.cloudinary.com/dzmidur6k/video/upload/v1773567125/4254119-uhd_4096_2160_24fps_vc4roo.mp4"
+    src="https://res.cloudinary.com/dzmidur6k/video/upload/v1773567676/3999415-hd_1920_1080_24fps_qr7ago.mp4"
   />
   <div className="hero-overlay absolute inset-0" />
 </div>
