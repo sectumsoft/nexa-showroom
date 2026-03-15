@@ -19,7 +19,7 @@ export default function AdminCarsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editCar, setEditCar] = useState<Car | null>(null);
   const [saving, setSaving] = useState(false);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+ const [uploadedImages, setUploadedImages] = useState<{url: string, isPrimary: boolean}[]>([]);
   const [saved, setSaved] = useState(false);
   const [form, setForm] = useState(empty);
 
@@ -60,17 +60,19 @@ const handleSave = async (e: React.FormEvent) => {
         setCars((p) => [res.data!, ...p]);
       }
     }
-    if (carId && uploadedImageUrl) {
-      await carsApi.uploadImage(carId, {
-        base64Image: '',
-        fileName: 'car-image.jpg',
-        imageUrl: uploadedImageUrl,
-        isPrimary: true,
-        altText: form.name,
-      });
-    }
+    if (carId && uploadedImages.length > 0) {
+  for (const img of uploadedImages) {
+    await carsApi.uploadImage(carId, {
+      base64Image: '',
+      fileName: 'car-image.jpg',
+      imageUrl: img.url,
+      isPrimary: img.isPrimary,
+      altText: form.name,
+    });
+  }
+}
     setSaving(false); setSaved(true);
-    setTimeout(() => { setSaved(false); setShowForm(false); setUploadedImageUrl(null); }, 1200);
+    setTimeout(() => { setSaved(false); setShowForm(false); setUploadedImages([]); }, 1200);
   };
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this car? This cannot be undone.')) return;
@@ -209,12 +211,10 @@ const handleSave = async (e: React.FormEvent) => {
                   <textarea rows={4} className="input-field resize-none" value={form.description} onChange={upd('description')} />
                 </div>
 
-                <div className="col-span-2">
-                  <ImageUploader
-                    carId={editCar?.id ?? 0}
-                    onUploaded={(url) => setUploadedImageUrl(url)}
-                  />
-                </div>
+                <ImageUploader
+                  carId={editCar?.id ?? 0}
+                  onUploaded={(imgs) => setUploadedImages(imgs)}
+                />
 
                 <div className="col-span-2 flex items-center gap-3">
                   <input type="checkbox" id="featured" className="accent-[#c8a96e] w-4 h-4"
