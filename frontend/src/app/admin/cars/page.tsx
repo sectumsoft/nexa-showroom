@@ -85,8 +85,8 @@ const handleSave = async (e: React.FormEvent) => {
       setForm((p) => ({ ...p, [k]: e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value }));
 
   return (
-    <div className="p-8">
-      <div className="mb-8 flex items-end justify-between">
+    <div className="p-4 md:p-8">
+      <div className="mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-4xl text-[#1a1a2e] mb-1">Cars</h1>
           <p className="font-body text-sm text-gray-500">{cars.length} models in the system</p>
@@ -104,7 +104,7 @@ const handleSave = async (e: React.FormEvent) => {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[700px]">
               <thead>
                 <tr className="border-b border-gray-100">
                   {['Name', 'Category', 'Fuel', 'Transmission', 'Starting Price', 'Featured', ''].map((h) => (
