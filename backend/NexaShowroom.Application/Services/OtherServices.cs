@@ -175,10 +175,12 @@ public class TestDriveService : ITestDriveService
             CustomerName = request.CustomerName,
             CustomerEmail = request.CustomerEmail,
             CustomerPhone = request.CustomerPhone,
-            PreferredDate = request.PreferredDate,
+            PreferredDate = DateTime.SpecifyKind(request.PreferredDate, DateTimeKind.Utc),
             PreferredTime = request.PreferredTime,
             Message = request.Message,
-            Status = "Pending"
+            Status = "Pending",
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
         };
 
         await _uow.TestDriveBookings.AddAsync(booking);
