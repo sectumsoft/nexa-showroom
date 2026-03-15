@@ -106,7 +106,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar — desktop always visible, mobile slide in */}
       <aside className={`
         fixed top-0 left-0 h-full w-64 bg-[#1a1a2e] flex flex-col z-40 transition-transform duration-300
-        lg:static lg:translate-x-0 lg:flex-shrink-0
+        lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 lg:flex-shrink-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <SidebarContent />
