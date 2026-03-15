@@ -20,14 +20,18 @@ export default async function HomePage() {
     <div>
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 bg-[#1a1a2e]">
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-30"
-            style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
-          />
-          <div className="hero-overlay absolute inset-0" />
-        </div>
+        {/* Background Video */}
+<div className="absolute inset-0 bg-[#1a1a2e] overflow-hidden">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    className="absolute inset-0 w-full h-full object-cover opacity-40"
+    src="https://res.cloudinary.com/dzmidur6k/video/upload/v1773567103/8102530-uhd_3840_2160_25fps_nzktcy.mp4"
+  />
+  <div className="hero-overlay absolute inset-0" />
+</div>
 
         {/* Decorative lines */}
         <div className="absolute right-0 top-0 w-px h-full bg-gradient-to-b from-transparent via-[#c8a96e]/30 to-transparent" />
