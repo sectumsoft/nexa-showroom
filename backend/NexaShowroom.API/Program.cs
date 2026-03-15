@@ -106,4 +106,5 @@ await db.Database.MigrateAsync();
 System.Diagnostics.Debug.WriteLine(
     BCrypt.Net.BCrypt.HashPassword("Admin@123")
 );
+Console.WriteLine("GENERATED HASH: " + BCrypt.Net.BCrypt.HashPassword("Admin@123"));    
 app.Run();
