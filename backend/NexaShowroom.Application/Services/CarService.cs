@@ -104,19 +104,28 @@ public class CarService : ICarService
         return ApiResponse<bool>.Ok(true);
     }
 
-    public async Task<ApiResponse<DTOs.Response.CarImage>> UploadCarImageAsync(int carId, UploadImageRequest request)
+public async Task<ApiResponse<CarImage>> UploadCarImageAsync(int carId, UploadImageRequest request)
+{
+    var imageUrl = !string.IsNullOrEmpty(request.ImageUrl)
+        ? request.ImageUrl
+        : string.Empty;
+
+    var carImage = new Domain.Entities.CarImage
     {
-        // Decode base64 and upload
-        var bytes = Convert.FromBase64String(request.Base64Image);
-        using var stream = new MemoryStream(bytes);
+        CarId = carId,
+        ImageUrl = imageUrl,
+        AltText = request.AltText,
+        IsPrimary = request.IsPrimary,
+        SortOrder = 0,
+        CreatedAt = DateTime.UtcNow,
+        UpdatedAt = DateTime.UtcNow
+    };
 
-        var url = await _fileStorage.UploadAsync(stream, request.FileName, "cars");
+    await _uow.AddCarImageAsync(carImage);
+    await _uow.SaveChangesAsync();
 
-        return ApiResponse<DTOs.Response.CarImage>.Ok(
-            new DTOs.Response.CarImage { ImageUrl = url }
-        );
-    }
-
+    return ApiResponse<CarImage>.Ok(new CarImage { ImageUrl = imageUrl });
+}
     private static CarSummaryResponse MapToSummary(Car c) => new()
     {
         Id = c.Id,

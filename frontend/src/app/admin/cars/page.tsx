@@ -4,6 +4,7 @@ import { Plus, Pencil, Trash2, X, Loader2, CheckCircle2 } from 'lucide-react';
 import { carsApi } from '@/lib/api';
 import { Car } from '@/types';
 import { formatPrice } from '@/lib/utils';
+import ImageUploader from '@/components/admin/ImageUploader';
 
 const empty = {
   name: '', shortDescription: '', description: '', category: 'SUV',
@@ -18,6 +19,7 @@ export default function AdminCarsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editCar, setEditCar] = useState<Car | null>(null);
   const [saving, setSaving] = useState(false);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [form, setForm] = useState(empty);
 
@@ -40,22 +42,36 @@ export default function AdminCarsPage() {
     setEditCar(car);
     setShowForm(true);
   };
-
-  const handleSave = async (e: React.FormEvent) => {
+const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     const payload = { ...form, startingPrice: Number(form.startingPrice) };
+    let carId: number | null = null;
     if (editCar) {
       const res = await carsApi.update(editCar.id, payload as Partial<Car>);
-      if (res.success && res.data) setCars((p) => p.map((c) => c.id === editCar.id ? res.data! : c));
+      if (res.success && res.data) {
+        carId = res.data.id;
+        setCars((p) => p.map((c) => c.id === editCar.id ? res.data! : c));
+      }
     } else {
       const res = await carsApi.create(payload as Partial<Car>);
-      if (res.success && res.data) setCars((p) => [res.data!, ...p]);
+      if (res.success && res.data) {
+        carId = res.data.id;
+        setCars((p) => [res.data!, ...p]);
+      }
+    }
+    if (carId && uploadedImageUrl) {
+      await carsApi.uploadImage(carId, {
+        base64Image: '',
+        fileName: 'car-image.jpg',
+        imageUrl: uploadedImageUrl,
+        isPrimary: true,
+        altText: form.name,
+      });
     }
     setSaving(false); setSaved(true);
-    setTimeout(() => { setSaved(false); setShowForm(false); }, 1200);
+    setTimeout(() => { setSaved(false); setShowForm(false); setUploadedImageUrl(null); }, 1200);
   };
-
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this car? This cannot be undone.')) return;
     await carsApi.delete(id);
@@ -192,6 +208,14 @@ export default function AdminCarsPage() {
                   <label className="font-body text-xs tracking-widest uppercase text-gray-400 block mb-2">Full Description</label>
                   <textarea rows={4} className="input-field resize-none" value={form.description} onChange={upd('description')} />
                 </div>
+
+                <div className="col-span-2">
+                  <ImageUploader
+                    carId={editCar?.id ?? 0}
+                    onUploaded={(url) => setUploadedImageUrl(url)}
+                  />
+                </div>
+
                 <div className="col-span-2 flex items-center gap-3">
                   <input type="checkbox" id="featured" className="accent-[#c8a96e] w-4 h-4"
                     checked={form.isFeatured}

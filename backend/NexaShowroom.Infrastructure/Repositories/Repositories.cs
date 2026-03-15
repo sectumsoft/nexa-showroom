@@ -184,4 +184,8 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task<int> SaveChangesAsync() => await _db.SaveChangesAsync();
     public void Dispose() => _db.Dispose();
+    public async Task AddCarImageAsync(Domain.Entities.CarImage image)
+        {
+            await _db.CarImages.AddAsync(image);
+        }
 }

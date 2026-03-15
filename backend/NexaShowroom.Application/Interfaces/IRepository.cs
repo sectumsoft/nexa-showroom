@@ -56,4 +56,5 @@ public interface IUnitOfWork : IDisposable
     IBookingRepository Bookings { get; }
     IAdminUserRepository AdminUsers { get; }
     Task<int> SaveChangesAsync();
+    Task AddCarImageAsync(Domain.Entities.CarImage image);
 }
